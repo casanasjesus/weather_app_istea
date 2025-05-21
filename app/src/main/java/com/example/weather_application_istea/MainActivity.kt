@@ -37,7 +37,8 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("clima") {
                         ClimaPage(
-                            navController
+                            navController,
+                            currentCiudad
                         )
                     }
                 }
