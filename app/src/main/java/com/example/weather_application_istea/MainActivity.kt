@@ -4,13 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.example.weather_application_istea.ciudades.CiudadesPage
+import com.example.weather_application_istea.clima.ClimaPage
 import com.example.weather_application_istea.ui.theme.Weather_Application_ISTEATheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +17,25 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Weather_Application_ISTEATheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = "" // Si hay ciudad guardada, ir a clima, si no, ir a la lista de ciudades
+                ) {
+                    composable("ciudades") {
+                        CiudadesPage(
+                            navController
+                        )
+                    }
+                    composable("clima") {
+                        ClimaPage(
+                            navController
+                        )
+                    }
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Weather_Application_ISTEATheme {
-        Greeting("Android")
-    }
-}
