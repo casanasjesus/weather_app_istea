@@ -11,6 +11,17 @@ fun ClimaPage(
     navController: NavController,
     currentCiudad: MutableState<Ciudad?>
 ) {
+    val ciudad = currentCiudad.value
+
+    if (ciudad == null) {
+        LaunchedEffect(Unit) {
+            navController.navigate("ciudades") {
+                popUpTo("clima") { inclusive = true }
+            }
+        }
+        return
+    }
+
     val viewModel = viewModel {
         ClimaViewModel (
             navController = navController,
