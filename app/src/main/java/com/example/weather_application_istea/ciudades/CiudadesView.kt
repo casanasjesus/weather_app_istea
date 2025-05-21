@@ -9,5 +9,4 @@ fun CiudadesView(
     onAction: (CiudadesIntencion) -> Unit
 ) {
     Text("Prueba page Ciudades")
-    TODO()
 }
