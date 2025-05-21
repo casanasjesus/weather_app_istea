@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,10 +20,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             Weather_Application_ISTEATheme {
                 val navController = rememberNavController()
+                val currentCiudad = remember { mutableStateOf<Ciudad?>(null) }
+                val startPage = if (currentCiudad.value != null) "clima" else "ciudades"
 
                 NavHost(
                     navController = navController,
-                    startDestination = "" // Si hay ciudad guardada, ir a clima, si no, ir a la lista de ciudades
+                    startDestination = startPage
                 ) {
                     composable("ciudades") {
                         CiudadesPage(
