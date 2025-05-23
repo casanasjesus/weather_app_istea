@@ -2,8 +2,10 @@ package com.example.weather_application_istea.ciudades
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.weather_application_istea.Ciudad
@@ -42,9 +45,9 @@ fun CiudadesView(
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             when(estado) {
-                CiudadesEstado.Cargando -> Text("Cargando lista de ciudades")
-                CiudadesEstado.Vacio -> Text("No hay ciudades para  mostrar")
-                is CiudadesEstado.Error -> Text("Ocurrió un error al cargar las ciudades")
+                CiudadesEstado.Cargando -> CargandoCiudadesView()
+                CiudadesEstado.Vacio -> VacioCiudadesView()
+                is CiudadesEstado.Error -> ErrorCiudadesView()
                 is CiudadesEstado.Resultado -> ResultadoCiudadesView(
                     listaCiudades = estado.listaDeCiudades,
                     onAction = onAction
@@ -52,6 +55,36 @@ fun CiudadesView(
             }
         }
     }
+}
+
+@Composable
+fun MessageBoxView(
+    modifier: Modifier = Modifier,
+    message: String
+) {
+    Box(
+        modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(message)
+    }
+}
+
+@Composable
+fun CargandoCiudadesView() {
+    MessageBoxView(message = "Cargando lista de ciudades")
+}
+
+@Composable
+fun VacioCiudadesView() {
+    MessageBoxView(message = "No hay ciudades para  mostrar")
+}
+
+@Composable
+fun ErrorCiudadesView() {
+    MessageBoxView(message = "Ocurrió un error al cargar las ciudades")
 }
 
 @Composable
