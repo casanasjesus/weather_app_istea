@@ -2,7 +2,7 @@ package com.example.weather_application_istea.ciudades
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.example.weather_application_istea.Ciudad
+import com.example.weather_application_istea.models.Ciudad
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
@@ -19,7 +19,7 @@ fun CiudadesPage(
 
     CiudadesView (
         estado = viewModel.estado
-    ) { intencion ->
+    ) { intencion: CiudadesIntencion ->
         viewModel.ejecutar(intencion)
     }
 }

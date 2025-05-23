@@ -5,7 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.weather_application_istea.Ciudad
+import com.example.weather_application_istea.models.Ciudad
 
 @Composable
 fun ClimaPage(

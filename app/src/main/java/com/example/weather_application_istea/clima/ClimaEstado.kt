@@ -1,6 +1,6 @@
 package com.example.weather_application_istea.clima
 
-import com.example.weather_application_istea.Clima
+import com.example.weather_application_istea.models.Clima
 
 sealed class ClimaEstado {
     data object Vacio: ClimaEstado()

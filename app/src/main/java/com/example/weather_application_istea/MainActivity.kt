@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.weather_application_istea.ciudades.CiudadesPage
 import com.example.weather_application_istea.clima.ClimaPage
+import com.example.weather_application_istea.models.Ciudad
 import com.example.weather_application_istea.ui.theme.Weather_Application_ISTEATheme
 
 class MainActivity : ComponentActivity() {

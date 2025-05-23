@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.example.weather_application_istea.Ciudad
+import com.example.weather_application_istea.models.Ciudad
 
 class CiudadesViewModel(
     val navController: NavController? = null,
@@ -25,6 +25,6 @@ class CiudadesViewModel(
     }
 
     fun ciudadSeleccionada(ciudad: Ciudad) {
-        navController?.navigate("clima/${ciudad.nombre}")
+        navController?.navigate("clima/${ciudad.name}")
     }
 }
