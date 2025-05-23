@@ -1,16 +1,10 @@
 package com.example.weather_application_istea.ciudades
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -18,10 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.weather_application_istea.models.Ciudad
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,6 +26,8 @@ fun CiudadesView(
     estado: CiudadesEstado,
     onAction: (CiudadesIntencion) -> Unit
 ) {
+    var query by remember { mutableStateOf("") }
+
     Scaffold(
         modifier = Modifier,
         topBar = {
@@ -43,74 +41,35 @@ fun CiudadesView(
             )
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+        ) {
+            BuscadorYGeoView(
+                query = query,
+                onQueryChange = {
+                    query = it
+                    onAction(CiudadesIntencion.BuscarCiudades(query))
+                                },
+                onGeolocalizacionClick = {
+                    TODO()
+                }
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             when(estado) {
                 CiudadesEstado.Cargando -> CargandoCiudadesView()
                 CiudadesEstado.Vacio -> VacioCiudadesView()
                 is CiudadesEstado.Error -> ErrorCiudadesView()
                 is CiudadesEstado.Resultado -> ResultadoCiudadesView(
-                    listaCiudades = estado.listaDeCiudades,
-                    onAction = onAction
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun MessageBoxView(
-    modifier: Modifier = Modifier,
-    message: String
-) {
-    Box(
-        modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(message)
-    }
-}
-
-@Composable
-fun CargandoCiudadesView() {
-    MessageBoxView(message = "Cargando lista de ciudades")
-}
-
-@Composable
-fun VacioCiudadesView() {
-    MessageBoxView(message = "No hay ciudades para  mostrar")
-}
-
-@Composable
-fun ErrorCiudadesView() {
-    MessageBoxView(message = "Ocurrió un error al cargar las ciudades")
-}
-
-@Composable
-fun ResultadoCiudadesView(
-    modifier: Modifier = Modifier,
-    listaCiudades: List<Ciudad>,
-    onAction: (CiudadesIntencion) -> Unit
-) {
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(15.dp)
-    ) {
-        items(listaCiudades) { ciudad ->
-            ElevatedCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(
-                        onClick = {
-                            onAction(CiudadesIntencion.CiudadSeleccionada(ciudad))
-                        }
-                    )
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    modifier = Modifier,
+                    estado.listaDeCiudades
                 ) {
-                    Text("El listado de ciudades va acá")
+                    onAction(
+                        CiudadesIntencion.CiudadSeleccionada(it)
+                    )
                 }
             }
         }
