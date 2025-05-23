@@ -16,10 +16,15 @@ class CiudadesViewModel(
     fun ejecutar(intencion: CiudadesIntencion) {
         when(intencion) {
             CiudadesIntencion.CargarCiudades -> cargarCiudades()
+            is CiudadesIntencion.CiudadSeleccionada -> ciudadSeleccionada(intencion.ciudad)
         }
     }
 
     fun cargarCiudades() {
         estado = CiudadesEstado.Resultado(listaDeCiudades)
+    }
+
+    fun ciudadSeleccionada(ciudad: Ciudad) {
+        navController?.navigate("clima/${ciudad.nombre}")
     }
 }
