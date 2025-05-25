@@ -2,37 +2,34 @@ package com.example.weather_application_istea.clima
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.weather_application_istea.models.Ciudad
+import com.example.weather_application_istea.clima.ClimaView
+
 
 @Composable
 fun ClimaPage(
     navController: NavController,
-    currentCiudad: MutableState<Ciudad?>
+    lat: Float?,
+    lon: Float?
 ) {
-    val ciudad = currentCiudad.value
-
-    if (ciudad == null) {
+    // Si los argumentos llegan nulos, volvemos a la pantalla de ciudades
+    if (lat == null || lon == null) {
         LaunchedEffect(Unit) {
             navController.navigate("ciudades") {
-                popUpTo("clima") { inclusive = true }
+                popUpTo("clima/{lat}/{lon}") { inclusive = true }
             }
         }
         return
     }
 
-    val viewModel = viewModel {
-        ClimaViewModel (
-            navController = navController,
-            currentCiudad = currentCiudad
-        )
-    }
+    // Usamos factory para pasar los argumentos al ViewModel
+    val viewModel: ClimaViewModel = viewModel(
+        factory = ClimaViewModelFactory(lat, lon)
+    )
 
-    ClimaView (
-        estado = viewModel.estado
-    ) { intencion ->
-        viewModel.ejecutar(intencion)
-    }
+    ClimaView(
+        estado = viewModel.estado,
+        onBack = { navController.popBackStack() }
+    )
 }

@@ -38,12 +38,13 @@ class CiudadesViewModel(
                     estado = CiudadesEstado.Resultado(ciudades)
                 }
             } catch (exeption: Exception) {
+                exeption.printStackTrace() // Para ver el error exacto en Logcat/Consola
                 estado = CiudadesEstado.Error(exeption.message ?: "Error desconocido")
             }
         }
     }
 
     fun ciudadSeleccionada(ciudad: Ciudad) {
-        navController?.navigate("clima/${ciudad.name}")
+        navController?.navigate("clima/${ciudad.lat}/${ciudad.lon}")
     }
 }
