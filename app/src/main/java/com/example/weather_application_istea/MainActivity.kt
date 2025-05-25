@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
@@ -23,23 +22,24 @@ class MainActivity : ComponentActivity() {
             Weather_Application_ISTEATheme {
                 val navController = rememberNavController()
                 val listaDeCiudades = remember { mutableStateListOf<Ciudad>() }
-                val currentCiudad = remember { mutableStateOf<Ciudad?>(null) }
-                val startPage = if (currentCiudad.value != null) "clima" else "ciudades"
 
                 NavHost(
                     navController = navController,
-                    startDestination = startPage
+                    startDestination = "ciudades"
                 ) {
                     composable("ciudades") {
                         CiudadesPage(
-                            navController,
-                            listaDeCiudades
+                            navController      = navController,
+                            listaDeCiudades    = listaDeCiudades,
                         )
                     }
-                    composable("clima") {
+                    composable("clima/{lat}/{lon}") { backStackEntry ->
+                        val lat = backStackEntry.arguments?.getString("lat")?.toFloatOrNull()
+                        val lon = backStackEntry.arguments?.getString("lon")?.toFloatOrNull()
                         ClimaPage(
                             navController,
-                            currentCiudad
+                            lat = lat,
+                            lon = lon
                         )
                     }
                 }
@@ -47,4 +47,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
