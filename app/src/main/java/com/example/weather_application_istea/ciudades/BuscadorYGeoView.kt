@@ -42,25 +42,5 @@ fun BuscadorYGeoView(
             singleLine   = true,
             shape        = RoundedCornerShape(12.dp)
         )
-        // ────────────────────────────────
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        // Botón circular
-        IconButton(
-            onClick  = onGeolocalizacionClick,
-            modifier = Modifier
-                .size(48.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = CircleShape
-                )
-        ) {
-            Icon(
-                Icons.Default.MyLocation,
-                contentDescription = "Mi ubicación",
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-        }
     }
 }
