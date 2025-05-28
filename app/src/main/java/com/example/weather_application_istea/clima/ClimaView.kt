@@ -17,7 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -238,11 +238,11 @@ fun ClimaContent(
             )
         ) {
             Icon(
-                imageVector = Icons.Filled.Star,
-                contentDescription = "Guardar como ciudad predeterminada",
+                imageVector = Icons.Filled.Search,
+                contentDescription = "Cambiar de ciudad",
                 modifier = Modifier.padding(end = 8.dp)
             )
-            Text("Establecer como predeterminada")
+            Text("Cambiar de ciudad")
         }
     }
 }
