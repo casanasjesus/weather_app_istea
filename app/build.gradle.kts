@@ -41,6 +41,9 @@ android {
 }
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("io.mockk:mockk:1.13.5")
     implementation ("com.google.android.gms:play-services-location:21.0.1")
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation(platform(libs.androidx.compose.bom))
