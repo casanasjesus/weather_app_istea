@@ -4,8 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.weather_application_istea.clima.ClimaView
-
 
 @Composable
 fun ClimaPage(
@@ -29,7 +27,7 @@ fun ClimaPage(
     )
 
     ClimaView(
-        estado = viewModel.estado,
-        onBack = { navController.popBackStack() }
+        navController = navController,
+        estado = viewModel.estado
     )
 }

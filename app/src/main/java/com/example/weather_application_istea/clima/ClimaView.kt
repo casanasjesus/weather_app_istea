@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -26,7 +25,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -42,14 +40,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.weather_application_istea.models.ClimaActual
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClimaView(
+    navController: NavController,
     estado: ClimaEstado,
-    onBack: () -> Unit,
     onAction: (ClimaIntencion) -> Unit = {}
 ) {
     Scaffold(
@@ -60,15 +59,6 @@ fun ClimaView(
                         text = "Weather App",
                         color = Color.White
                     )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Volver",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
@@ -113,6 +103,7 @@ fun ClimaView(
                 }
                 is ClimaEstado.Resultado -> {
                     ClimaContent(
+                        navController = navController,
                         clima = estado.clima,
                         modifier = Modifier
                             .align(Alignment.TopCenter)
@@ -126,6 +117,7 @@ fun ClimaView(
 
 @Composable
 fun ClimaContent(
+    navController: NavController,
     clima: ClimaActual,
     modifier: Modifier = Modifier
 ) {
@@ -227,7 +219,12 @@ fun ClimaContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { },
+            onClick = {
+                navController.navigate("ciudades") {
+                    popUpTo("ciudades") { inclusive = false }
+                    launchSingleTop = true
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
