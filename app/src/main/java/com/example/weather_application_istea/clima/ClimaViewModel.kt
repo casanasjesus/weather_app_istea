@@ -5,18 +5,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weather_application_istea.repository.Repository
 import com.example.weather_application_istea.repository.RepositoryApi
 import kotlinx.coroutines.launch
 
 class ClimaViewModel(
     private val lat: Float,
-    private val lon: Float
+    private val lon: Float,
+    private val repository: Repository = RepositoryApi()
 ) : ViewModel() {
 
     var estado by mutableStateOf<ClimaEstado>(ClimaEstado.Vacio)
         private set
-
-    private val repository = RepositoryApi()
 
     init {
         cargarClima()
