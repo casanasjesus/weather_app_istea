@@ -27,7 +27,7 @@ fun ClimaPage(
     )
 
     ClimaView(
-        estado = viewModel.estado,
-        onBack = { navController.popBackStack() }
+        navController = navController,
+        estado = viewModel.estado
     )
 }

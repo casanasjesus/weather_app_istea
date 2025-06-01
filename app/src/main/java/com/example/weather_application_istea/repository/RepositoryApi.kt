@@ -38,8 +38,7 @@ class RepositoryApi : Repository {
         }
     }
 
-
-    suspend fun getClimaActual(lat: Float, lon: Float): ClimaActual {
+    override suspend fun getClimaActual(lat: Float, lon: Float): ClimaActual {
         val response = client.get("https://api.openweathermap.org/data/2.5/weather") {
             parameter("lat", lat)
             parameter("lon", lon)
