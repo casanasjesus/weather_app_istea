@@ -1,5 +1,6 @@
 package com.example.weather_application_istea.ciudades
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.CircularProgressIndicator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,7 +30,8 @@ fun CiudadesView(
     estado: CiudadesEstado,
     onAction: (CiudadesIntencion) -> Unit,
     onGeolocalizacionClick: () -> Unit,
-    onUbicacionClick: () -> Unit
+    onUbicacionClick: () -> Unit,
+    isLoading: Boolean
 ) {
     var query by remember { mutableStateOf("") }
 
@@ -85,6 +88,20 @@ fun CiudadesView(
                     .align(Alignment.BottomEnd)
                     .padding(16.dp)
             )
+
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.4f))
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = Color.White
+                    )
+                }
+            }
+
         }
     }
 }
