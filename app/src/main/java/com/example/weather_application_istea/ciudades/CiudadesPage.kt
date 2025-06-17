@@ -23,6 +23,7 @@ fun CiudadesPage(
     navController: NavController,
     listaDeCiudades: List<Ciudad>
 ) {
+    var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val locationRequest = LocationRequest
         .Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000) // cada 1 seg
@@ -69,30 +70,46 @@ fun CiudadesPage(
     }
 
     var doUbicacion: () -> Unit = {
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            val locationRequest = LocationRequest
-                .Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
-                .setMaxUpdates(1)
-                .build()
+        isLoading = true // 👈 Mostrar spinner
 
-            val locationCallback = object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    val updatedLocation = locationResult.lastLocation
-                    if (updatedLocation != null) {
-                        navController.navigate("clima/${updatedLocation.latitude}/${updatedLocation.longitude}")
-                    } else {
-                        Toast.makeText(context, "No se pudo obtener la ubicación", Toast.LENGTH_SHORT).show()
+        if (ContextCompat.checkSelfPermission(
+                context, Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permisoLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            isLoading = false // 👈 Ocultar si no hay permiso
+        } else {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                val locationRequest = LocationRequest
+                    .Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
+                    .setMaxUpdates(1)
+                    .build()
+
+                val locationCallback = object : LocationCallback() {
+                    override fun onLocationResult(locationResult: LocationResult) {
+                        isLoading = false // 👈 Ocultar spinner
+
+                        val updatedLocation = locationResult.lastLocation
+                        if (updatedLocation != null) {
+                            navController.navigate("clima/${updatedLocation.latitude}/${updatedLocation.longitude}")
+                        } else {
+                            Toast.makeText(context, "No se pudo obtener la ubicación", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
-            }
 
-            fusedLocationClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                null
-            )
+                fusedLocationClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    null
+                )
+            }.addOnFailureListener {
+                isLoading = false // 👈 Ocultar en error
+                Toast.makeText(context, "Error al obtener la ubicación", Toast.LENGTH_SHORT).show()
+            }
         }
     }
+
 
 
     val viewModel: CiudadesViewModel = viewModel {
@@ -107,6 +124,7 @@ fun CiudadesPage(
         estado                 = viewModel.estado,
         onAction               = { intent -> viewModel.ejecutar(intent) },
         onGeolocalizacionClick = doGeolocalizacion,
-        onUbicacionClick       = doUbicacion
+        onUbicacionClick       = doUbicacion,
+        isLoading              = isLoading
     )
 }
