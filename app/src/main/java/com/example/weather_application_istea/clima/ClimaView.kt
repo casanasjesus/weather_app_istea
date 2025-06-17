@@ -43,6 +43,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.weather_application_istea.models.ClimaActual
+import android.content.Intent
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -228,7 +233,7 @@ fun ClimaContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -241,6 +246,42 @@ fun ClimaContent(
             )
             Text("Cambiar de ciudad")
         }
+
+        val context = LocalContext.current
+        val ciudad = clima.name
+        val temperatura = clima.main.temp.toInt()
+        val descripcion = weather?.description?.replaceFirstChar { it.uppercase() } ?: "Sin descripción"
+
+        Button(
+            onClick = {
+                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        "El clima en $ciudad es de $temperatura° con $descripcion. 🌤️"
+                    )
+                }
+                context.startActivity(
+                    Intent.createChooser(shareIntent, "Compartir clima con...")
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.onSecondary
+            )
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Share,
+                contentDescription = "Compartir clima",
+                modifier = Modifier.padding(end = 8.dp)
+            )
+            Text("Compartir clima")
+        }
+
     }
 }
 
