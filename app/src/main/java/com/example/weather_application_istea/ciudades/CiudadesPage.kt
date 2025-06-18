@@ -5,18 +5,25 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.weather_application_istea.models.Ciudad
 import com.example.weather_application_istea.repository.RepositoryApi
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationRequest
+import com.example.weather_application_istea.storage.CiudadStorage
 import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import kotlinx.coroutines.launch
 
 @Composable
 fun CiudadesPage(
@@ -69,6 +76,9 @@ fun CiudadesPage(
         }
     }
 
+    val storageContext = LocalContext.current
+    val storageScope = rememberCoroutineScope()
+
     var doUbicacion: () -> Unit = {
         isLoading = true // 👈 Mostrar spinner
 
@@ -91,7 +101,14 @@ fun CiudadesPage(
 
                         val updatedLocation = locationResult.lastLocation
                         if (updatedLocation != null) {
-                            navController.navigate("clima/${updatedLocation.latitude}/${updatedLocation.longitude}")
+                            val latitude: Double = updatedLocation.latitude
+                            val longitude: Double = updatedLocation.longitude
+
+                            navController.navigate("clima/${latitude}/${longitude}")
+
+                            storageScope.launch {
+                                CiudadStorage.guardarCiudadStorage(storageContext, latitude.toFloat(), longitude.toFloat())
+                            }
                         } else {
                             Toast.makeText(context, "No se pudo obtener la ubicación", Toast.LENGTH_SHORT).show()
                         }
@@ -109,8 +126,6 @@ fun CiudadesPage(
             }
         }
     }
-
-
 
     val viewModel: CiudadesViewModel = viewModel {
         CiudadesViewModel(
