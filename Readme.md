@@ -2,7 +2,7 @@
 
 Aplicación móvil desarrollada en **Kotlin** como parte del curso de Aplicaciones Móviles en ISTEA. La app permite consultar el estado del clima en ciudades específicas, ya sea buscándolas manualmente o utilizando la ubicación actual del dispositivo. Implementa almacenamiento local para mantener el estado al reiniciar la aplicación.
 
-## 🧩 Arquitectura y Estructura
+## 🛠 Arquitectura y Estructura
 
 El proyecto sigue una estructura modular dentro del entorno Android:
 
@@ -25,7 +25,7 @@ El proyecto sigue una estructura modular dentro del entorno Android:
     - Si **no hay ninguna ciudad guardada**, se muestra la pantalla para buscar ciudades o usar la ubicación actual.
 
 
-## 🧪 Tecnologías y herramientas
+## 🛠 Tecnologías y herramientas
 
 - **Lenguaje:** Kotlin
 - **Plataforma:** Android SDK
@@ -46,7 +46,7 @@ El proyecto sigue una estructura modular dentro del entorno Android:
 
 3. Ejecutar la app en un emulador o dispositivo físico
 
-## 🧠 Notas adicionales
+## 📌 Notas adicionales
 
 1. Asegurate de tener habilitados los permisos de ubicación para un correcto funcionamiento.
 
