@@ -1,17 +1,17 @@
 # 🌦 Weather Application - Kotlin (ISTEA)
 
-Aplicación móvil desarrollada en **Kotlin** como parte del curso de Aplicaciones Móviles en ISTEA. La app permite consultar el estado del clima en ciudades específicas, ya sea buscándolas manualmente o utilizando la ubicación actual del dispositivo. Implementa almacenamiento local para mantener el estado al reiniciar la aplicación.
+Aplicación móvil desarrollada en **Kotlin** como parte de la materia Aplicaciones Móviles en ISTEA. La app permite consultar el estado del clima en ciudades específicas, ya sea buscándolas manualmente o utilizando la ubicación actual del dispositivo. Implementa almacenamiento local para mantener el estado al reiniciar la aplicación.
 
 ## 🛠 Arquitectura y Estructura
 
 El proyecto sigue una estructura modular dentro del entorno Android:
 
-- `MainActivity.kt`: Entry point de la app.
+- `MainActivity.kt`: Entrypoint de la aplicación.
 - `ciudades`: Permite buscar ciudades y utilizar la geolocalización.
 - `clima`: Muestra el clima actual de la ciudad seleccionada.
 - `models`: Registra el formato de los objetos Ciudad y Clima.
-- `repository`: Almacena los servicios parab buscar ciudad o ciudades y obtener el clima de la ciudad seleccionada.
-- `storage`: Almacena la rersistencia local con Context DataStore.
+- `repository`: Almacena los servicios para buscar ciudad o ciudades y obtener el clima de la ciudad seleccionada.
+- `storage`: Almacena la persistencia local con Context DataStore.
 - `ui.theme`: Almacena la configuración de tipografía y colores de la aplicación.
 
 
@@ -19,7 +19,7 @@ El proyecto sigue una estructura modular dentro del entorno Android:
 
 - 🔍 **Búsqueda de ciudades:** Ingresá el nombre de una ciudad para obtener información del clima.
 - 📍 **Ubicación actual:** Obtené el clima automáticamente según tu ubicación.
-- 🕒 **Persistencia de ciudad:** La última ciudad consultada se guarda en el almacenamiento local para cargar automáticamente al reiniciar la app.
+- 🕒 **Persistencia de ciudad:** La última ciudad consultada se guarda en el almacenamiento local para cargar automáticamente al reiniciar la aplicación.
 - 🧭 **Navegación automática:**
     - Si **ya hay una ciudad guardada**, la app inicia directamente en la pantalla del clima de esa ciudad.
     - Si **no hay ninguna ciudad guardada**, se muestra la pantalla para buscar ciudades o usar la ubicación actual.
