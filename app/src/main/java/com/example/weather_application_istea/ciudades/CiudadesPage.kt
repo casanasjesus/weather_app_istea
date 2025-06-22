@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.weather_application_istea.models.Ciudad
 import com.example.weather_application_istea.repository.RepositoryApi
 import com.example.weather_application_istea.storage.CiudadStorage
 import com.google.android.gms.location.LocationCallback
@@ -27,8 +26,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CiudadesPage(
-    navController: NavController,
-    listaDeCiudades: List<Ciudad>
+    navController: NavController
 ) {
     var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -130,7 +128,6 @@ fun CiudadesPage(
     val viewModel: CiudadesViewModel = viewModel {
         CiudadesViewModel(
             navController   = navController,
-            listaDeCiudades = listaDeCiudades,
             repository      = RepositoryApi()
         )
     }
