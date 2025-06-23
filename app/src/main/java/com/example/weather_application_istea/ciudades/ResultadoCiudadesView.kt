@@ -28,7 +28,6 @@ import com.example.weather_application_istea.models.Ciudad
 import com.example.weather_application_istea.storage.CiudadStorage
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun ResultadoCiudadesView(
     modifier: Modifier = Modifier,

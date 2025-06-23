@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 
 class CiudadesViewModel(
     val navController: NavController? = null,
-    val listaDeCiudades: List<Ciudad>,
     val repository: Repository
 ): ViewModel() {
     var estado by mutableStateOf<CiudadesEstado>(CiudadesEstado.Vacio)
