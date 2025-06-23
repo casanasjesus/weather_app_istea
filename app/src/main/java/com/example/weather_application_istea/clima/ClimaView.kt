@@ -48,13 +48,17 @@ import coil.compose.AsyncImage
 import com.example.weather_application_istea.models.ClimaActual
 
 
+
+import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
-import com.patrykandpatrick.vico.compose.chart.line.lineChart
-import com.patrykandpatrick.vico.compose.chart.line.lineSpec
+import com.patrykandpatrick.vico.compose.chart.column.columnChart
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import com.patrykandpatrick.vico.core.entry.entryModelOf
+import com.patrykandpatrick.vico.core.component.shape.Shapes
+import com.patrykandpatrick.vico.core.component.Component
+import com.patrykandpatrick.vico.core.component.shape.LineComponent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -356,37 +360,44 @@ private fun AuxMetric(icon: String, label: String, value: String) {
 }
 @Composable
 fun GraficoMaxMin(extremos: List<Triple<String, Float, Float>>) {
-    // Preparar datos: [ [min1, max1], [min2, max2], ... ]
-    val entries = extremos.mapIndexed { index, (_, min, max) ->
-        listOf(
-            FloatEntry(index.toFloat(), min),  // Mínima
-            FloatEntry(index.toFloat(), max)  // Máxima
-        )
-    }.flatten()  // Aplanar a lista simple: [min1, max1, min2, max2, ...]
+    val minEntries = extremos.mapIndexed { index, triple ->
+        FloatEntry(index.toFloat(), triple.second)
+    }
+    val maxEntries = extremos.mapIndexed { index, triple ->
+        FloatEntry(index.toFloat(), triple.third)
+    }
 
-    // Modelo para el gráfico
-    val chartModel = entryModelOf(entries)
+    val model = entryModelOf(minEntries, maxEntries)
 
-    // Gráfico
+    val blueColumn = LineComponent(
+        color = Color.Blue.hashCode(),
+        thicknessDp = 20f,
+        shape = Shapes.roundedCornerShape(allPercent = 30)
+    )
+    val redColumn = LineComponent(
+        color = Color.Red.hashCode(),
+        thicknessDp = 20f,
+        shape = Shapes.roundedCornerShape(allPercent = 30)
+    )
+
     Chart(
-        chart = lineChart(
-            lines = listOf(
-                lineSpec(  // Línea azul para mínimas
-                    lineColor = Color.Blue,
-                    lineThickness = 4.dp
-                ),
-                lineSpec(  // Línea roja para máximas
-                    lineColor = Color.Red,
-                    lineThickness = 4.dp
-                )
+        chart = columnChart(
+            columns = listOf(
+                blueColumn,  // Mínimas
+                redColumn    // Máximas
             )
         ),
-        model = chartModel,
-        startAxis = rememberStartAxis(),
+        model = model,
+        startAxis = rememberStartAxis(
+            title = "Temperatura (°C)",
+            valueFormatter = { value, _ -> "%.1f".format(value) }
+        ),
         bottomAxis = rememberBottomAxis(
+            title = "Días",
             valueFormatter = { value, _ ->
                 extremos.getOrNull(value.toInt())?.first ?: ""
-            }
+            },
+            guideline = null
         ),
         modifier = Modifier
             .fillMaxWidth()

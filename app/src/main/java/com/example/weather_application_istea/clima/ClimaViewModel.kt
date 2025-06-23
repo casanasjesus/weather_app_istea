@@ -41,24 +41,27 @@ class ClimaViewModel(
         viewModelScope.launch {
             try {
                 val pronostico = repository.getPronostico5Dias(lat, lon)
-                print(pronostico)
+
                 extremosPorDia = obtenerExtremosPorDia(pronostico.list)
+
+                print(extremosPorDia)
             } catch (e: Exception) {
                 println("Error cargando pronóstico: ${e.message}")
             }
         }
     }
-
     private fun obtenerExtremosPorDia(forecast: List<ForecastItem>): List<Triple<String, Float, Float>> {
         return forecast
-            .groupBy { it.dt_txt.substring(0, 10) } // Agrupar por fecha YYYY-MM-DD
-            .map { (fecha, itemsDelDia) ->
+            .groupBy { it.dt_txt.substring(0, 10) } // Agrupa por "YYYY-MM-DD"
+            .map { (fechaCompleta, itemsDelDia) ->
                 val min = itemsDelDia.minOf { it.main.temp_min }
                 val max = itemsDelDia.maxOf { it.main.temp_max }
-                Triple(fecha.substring(5), min, max) // Devolver MM-DD
+                val fechaFormatoCorto = fechaCompleta.substring(5) // MM-DD para mostrar
+                Triple(fechaFormatoCorto, min, max)
             }
-            .take(5)
+            .take(5) // Tomá los primeros 5 días completos
     }
+
 
 
 }
