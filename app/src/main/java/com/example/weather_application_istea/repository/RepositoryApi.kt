@@ -1,7 +1,8 @@
 package com.example.weather_application_istea.repository
 
 import com.example.weather_application_istea.models.Ciudad
-import com.example.weather_application_istea.models.ClimaActual // <--- IMPORTANTE!
+import com.example.weather_application_istea.models.ClimaActual
+import com.example.weather_application_istea.models.Pronostico5Dias // <--- IMPORTANTE!
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -53,4 +54,21 @@ class RepositoryApi : Repository {
             throw Exception("Error obteniendo el clima actual: ${response.status}")
         }
     }
+    override suspend fun getPronostico5Dias(lat: Float, lon: Float): Pronostico5Dias {
+        val response = client.get("https://api.openweathermap.org/data/2.5/forecast") {
+            parameter("lat", lat)
+            parameter("lon", lon)
+            parameter("appid", apiKey)
+            parameter("units", "metric")
+            parameter("lang", "es")
+        }
+
+        if (response.status == HttpStatusCode.OK) {
+            return response.body()
+        } else {
+            throw Exception("Error obteniendo el pronóstico de 5 días: ${response.status}")
+        }
+    }
+
+
 }

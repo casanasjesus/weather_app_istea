@@ -17,6 +17,18 @@ data class WeatherDescription(
     val description: String,
     val icon: String
 )
+@Serializable
+data class Pronostico5Dias(
+    val list: List<ForecastItem>
+)
+
+@Serializable
+data class ForecastItem(
+    val dt_txt: String,
+    val main: MainInfo,
+    val weather: List<WeatherDescription>,
+    val wind: WindInfo
+)
 
 @Serializable
 data class MainInfo(
@@ -38,3 +50,4 @@ data class WindInfo(
 data class SysInfo(
     val country: String
 )
+
