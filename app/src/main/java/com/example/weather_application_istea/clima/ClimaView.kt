@@ -37,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -46,19 +45,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.weather_application_istea.models.ClimaActual
-
-
-
-import androidx.compose.ui.unit.dp
-import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
-import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
-import com.patrykandpatrick.vico.core.entry.FloatEntry
+import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.core.entry.entryModelOf
-import com.patrykandpatrick.vico.core.component.shape.Shapes
-import com.patrykandpatrick.vico.core.component.Component
+import com.patrykandpatrick.vico.core.entry.FloatEntry
+import com.patrykandpatrick.vico.core.chart.column.ColumnChart
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
+import com.patrykandpatrick.vico.core.component.shape.Shapes
+import androidx.compose.ui.graphics.Color
+
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -369,39 +368,84 @@ fun GraficoMaxMin(extremos: List<Triple<String, Float, Float>>) {
 
     val model = entryModelOf(minEntries, maxEntries)
 
+    // Barras más gruesas
     val blueColumn = LineComponent(
         color = Color.Blue.hashCode(),
-        thicknessDp = 20f,
-        shape = Shapes.roundedCornerShape(allPercent = 30)
-    )
-    val redColumn = LineComponent(
-        color = Color.Red.hashCode(),
-        thicknessDp = 20f,
+        thicknessDp = 24f,
         shape = Shapes.roundedCornerShape(allPercent = 30)
     )
 
-    Chart(
-        chart = columnChart(
-            columns = listOf(
-                blueColumn,  // Mínimas
-                redColumn    // Máximas
-            )
-        ),
-        model = model,
-        startAxis = rememberStartAxis(
-            title = "Temperatura (°C)",
-            valueFormatter = { value, _ -> "%.1f".format(value) }
-        ),
-        bottomAxis = rememberBottomAxis(
-            title = "Días",
-            valueFormatter = { value, _ ->
-                extremos.getOrNull(value.toInt())?.first ?: ""
-            },
-            guideline = null
-        ),
+    val redColumn = LineComponent(
+        color = Color.Red.hashCode(),
+        thicknessDp = 24f,
+        shape = Shapes.roundedCornerShape(allPercent = 30)
+    )
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(250.dp)
             .padding(16.dp)
-    )
+    ) {
+        // Gráfico de barras
+        Chart(
+            chart = columnChart(
+                columns = listOf(blueColumn, redColumn),
+                mergeMode = ColumnChart.MergeMode.Grouped
+            ),
+            model = model,
+            startAxis = rememberStartAxis(
+                title = "Temperatura (°C)",
+                valueFormatter = { value, _ -> "%.1f".format(value) }
+            ),
+            bottomAxis = rememberBottomAxis(
+                title = "Horas",
+                valueFormatter = { value, _ ->
+                    extremos.getOrNull(value.toInt())?.first ?: ""
+                },
+                guideline = null
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+        )
+
+        // Etiquetas de texto debajo de las barras - CORRECCIÓN PRINCIPAL
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            extremos.forEach { triple ->
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    // Nombre del período
+                    Text(
+                        text = triple.first,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+
+                    // Temperatura mínima
+                    Text(
+                        text = "%.1f°C".format(triple.second),
+                        color = Color.Blue,
+                        fontSize = 12.sp
+                    )
+
+                    // Temperatura máxima
+                    Text(
+                        text = "%.1f°C".format(triple.third),
+                        color = Color.Red,
+                        fontSize = 12.sp
+                    )
+                }
+            }
+        }
+    }
 }
+
+
